@@ -1,8 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  ForbiddenException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { User, UserRole } from '../common/types/types';
+import { UserRole } from '../common/types/types';
 import { randomUUID } from 'crypto';
+import { User } from './entities/user.entity';
+import { isUUID } from 'class-validator';
 @Injectable()
 export class UserService {
   private readonly users: User[] = [
@@ -24,14 +31,15 @@ export class UserService {
     },
   ];
   create(createUserDto: CreateUserDto) {
-    const newUser: User = {
+    const newUser: User = new User({
       id: randomUUID(),
       login: createUserDto.login,
       password: createUserDto.password,
-      role: createUserDto.role || UserRole.VIEWER,
+      role: createUserDto.role ?? UserRole.VIEWER,
       createdAt: Date.now(),
       updatedAt: Date.now(),
-    };
+    });
+
     this.users.push(newUser);
     return newUser;
   }
@@ -41,16 +49,26 @@ export class UserService {
   }
 
   findOne(id: string) {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid UUID format for id');
+    }
+    const user = this.users.find((user) => user.id === id);
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
     return this.users.find((user) => user.id === id);
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid UUID format for id');
+    }
     const user = this.users.find((user) => user.id === id);
     if (!user) {
-      return null;
+      throw new NotFoundException('User not found');
     }
     if (user.password !== updateUserDto.oldPassword) {
-      return null;
+      throw new ForbiddenException('Old password does not match');
     }
     user.password = updateUserDto.newPassword;
     user.updatedAt = Date.now();
@@ -58,11 +76,13 @@ export class UserService {
   }
 
   remove(id: string) {
+    if (!isUUID(id)) {
+      throw new BadRequestException('Invalid UUID format for id');
+    }
     const index = this.users.findIndex((user) => user.id === id);
     if (index === -1) {
-      return null;
+      throw new NotFoundException('User not found');
     }
-    this.users.splice(index, 1)[0];
-    return this.findOne(id);
+    this.users.splice(index, 1);
   }
 }
