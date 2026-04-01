@@ -27,6 +27,10 @@ After starting the app on port (4000 as default) you can open
 in your browser OpenAPI documentation by typing http://localhost:4000/doc/.
 For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
+## API Endpoints
+
+[Postman collection](https://dzichonka-3696400.postman.co/workspace/Anna-Vasilevich's-Workspace~4752c36c-245c-492f-8d06-79b9e08f3075/collection/48079025-8a74a39c-186b-432d-a8f4-1c20a90b5aef?action=share&creator=48079025)
+
 ## Testing
 
 After application running open new terminal and enter:
