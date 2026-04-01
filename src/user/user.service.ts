@@ -30,6 +30,14 @@ export class UserService {
       updatedAt: 1775041279469,
     },
   ];
+
+  private findIndexById(id: string) {
+    const index = this.users.findIndex((user) => user.id === id);
+    if (index === -1) {
+      throw new NotFoundException('User with the given id not found');
+    }
+    return index;
+  }
   create(createUserDto: CreateUserDto) {
     const newUser: User = new User({
       id: randomUUID(),
@@ -54,19 +62,16 @@ export class UserService {
     }
     const user = this.users.find((user) => user.id === id);
     if (!user) {
-      throw new NotFoundException('User not found');
+      throw new NotFoundException('User with the given id not found');
     }
-    return this.users.find((user) => user.id === id);
+    return user;
   }
 
   update(id: string, updateUserDto: UpdateUserDto) {
     if (!isUUID(id)) {
       throw new BadRequestException('Invalid UUID format for id');
     }
-    const user = this.users.find((user) => user.id === id);
-    if (!user) {
-      throw new NotFoundException('User not found');
-    }
+    const user = this.findOne(id);
     if (user.password !== updateUserDto.oldPassword) {
       throw new ForbiddenException('Old password does not match');
     }
@@ -79,10 +84,7 @@ export class UserService {
     if (!isUUID(id)) {
       throw new BadRequestException('Invalid UUID format for id');
     }
-    const index = this.users.findIndex((user) => user.id === id);
-    if (index === -1) {
-      throw new NotFoundException('User not found');
-    }
+    const index = this.findIndexById(id);
     this.users.splice(index, 1);
   }
 }

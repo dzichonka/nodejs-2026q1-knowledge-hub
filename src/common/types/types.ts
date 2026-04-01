@@ -18,7 +18,6 @@ export interface Article {
   createdAt: number; // timestamp of creation
   updatedAt: number; // timestamp of last update
 }
-
 export interface Category {
   id: string; // uuid v4
   name: string;
