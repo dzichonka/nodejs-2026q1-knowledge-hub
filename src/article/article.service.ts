@@ -7,7 +7,31 @@ import { ArticleStatus } from 'src/common/types/types';
 
 @Injectable()
 export class ArticleService {
-  private readonly articles: Article[] = [];
+  articles: Article[] = [
+    {
+      id: 'bec40a79-983c-487a-be9b-6ffff661a8c0',
+      title: 'First Article of Schrödinger',
+      content:
+        'If you open the box, the cat is alive. If you do not open the box, the cat is dead.',
+      status: ArticleStatus.PUBLISHED,
+      authorId: 'aec40a79-983c-487a-be9b-6ffff661a8c0',
+      categoryId: null,
+      tags: ['cat', 'quantum mechanics', 'physics'],
+      createdAt: 1775041279470,
+      updatedAt: 1775041279470,
+    },
+    {
+      id: 'bec40a79-983c-487a-be9b-6ffff661a8c1',
+      title: 'Second Article by Zuckerberg',
+      content: 'I hate tiktok',
+      status: ArticleStatus.DRAFT,
+      authorId: 'aec40a79-983c-487a-be9b-6ffff661a8c1',
+      categoryId: null,
+      tags: ['tiktok', 'facebook', 'social media'],
+      createdAt: 1775041279472,
+      updatedAt: 1775041279472,
+    },
+  ];
 
   private findIndexById(id: string) {
     const index = this.articles.findIndex((article) => article.id === id);
@@ -15,6 +39,15 @@ export class ArticleService {
       throw new NotFoundException('Article with the given id not found');
     }
     return index;
+  }
+
+  clearAuthor(userId: string) {
+    this.articles = this.articles.map((article) => {
+      if (article.authorId === userId) {
+        return { ...article, authorId: null };
+      }
+      return article;
+    });
   }
 
   create(createArticleDto: CreateArticleDto) {
@@ -48,14 +81,8 @@ export class ArticleService {
   update(id: string, updateArticleDto: UpdateArticleDto) {
     const article = this.findOne(id);
     const updatedArticle = new Article({
-      id: article.id,
-      title: updateArticleDto.title,
-      content: updateArticleDto.content,
-      status: updateArticleDto.status ?? ArticleStatus.DRAFT,
-      authorId: updateArticleDto.authorId,
-      categoryId: updateArticleDto.categoryId,
-      tags: updateArticleDto.tags ?? [],
-      createdAt: article.createdAt,
+      ...article,
+      ...updateArticleDto,
       updatedAt: Date.now(),
     });
     this.articles[this.findIndexById(id)] = updatedArticle;

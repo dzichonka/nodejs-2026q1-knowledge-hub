@@ -10,6 +10,7 @@ import { UserRole } from '../common/types/types';
 import { randomUUID } from 'crypto';
 import { User } from './entities/user.entity';
 import { isUUID } from 'class-validator';
+import { ArticleService } from 'src/article/article.service';
 @Injectable()
 export class UserService {
   private readonly users: User[] = [
@@ -30,6 +31,8 @@ export class UserService {
       updatedAt: 1775041279469,
     },
   ];
+
+  constructor(private readonly articleService: ArticleService) {}
 
   private findIndexById(id: string) {
     const index = this.users.findIndex((user) => user.id === id);
@@ -86,5 +89,6 @@ export class UserService {
     }
     const index = this.findIndexById(id);
     this.users.splice(index, 1);
+    this.articleService.clearAuthor(id);
   }
 }

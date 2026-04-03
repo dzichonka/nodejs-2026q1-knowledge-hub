@@ -9,18 +9,18 @@ import {
 import { ArticleStatus } from 'src/common/types/types';
 
 export class CreateArticleDto {
-  @IsNotEmpty({ message: 'Title must not be empty' })
+  @IsNotEmpty({ message: 'Title is required' })
   @IsString({ message: 'Title must be a string' })
   title: string;
 
   @IsString({ message: 'Content must be a string' })
-  @IsNotEmpty({ message: 'Content must not be empty' })
+  @IsNotEmpty({ message: 'Content is required' })
   content: string;
 
+  @IsOptional()
   @IsEnum(ArticleStatus, {
     message: 'Status must be one of the following: draft, published, archived',
   })
-  @IsOptional()
   status: ArticleStatus;
 
   @IsOptional()
