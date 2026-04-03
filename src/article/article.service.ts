@@ -15,7 +15,7 @@ export class ArticleService {
         'If you open the box, the cat is alive. If you do not open the box, the cat is dead.',
       status: ArticleStatus.PUBLISHED,
       authorId: 'aec40a79-983c-487a-be9b-6ffff661a8c0',
-      categoryId: null,
+      categoryId: 'cec40a79-983c-487a-be9b-6ffff661a8c0',
       tags: ['cat', 'quantum mechanics', 'physics'],
       createdAt: 1775041279470,
       updatedAt: 1775041279470,
@@ -26,7 +26,7 @@ export class ArticleService {
       content: 'I hate tiktok',
       status: ArticleStatus.DRAFT,
       authorId: 'aec40a79-983c-487a-be9b-6ffff661a8c1',
-      categoryId: null,
+      categoryId: 'cec40a79-983c-487a-be9b-6ffff661a8c1',
       tags: ['tiktok', 'facebook', 'social media'],
       createdAt: 1775041279472,
       updatedAt: 1775041279472,
@@ -41,10 +41,10 @@ export class ArticleService {
     return index;
   }
 
-  clearAuthor(userId: string) {
+  clearField(field: 'authorId' | 'categoryId', id: string) {
     this.articles = this.articles.map((article) => {
-      if (article.authorId === userId) {
-        return { ...article, authorId: null };
+      if (article[field] === id) {
+        return { ...article, [field]: null };
       }
       return article;
     });
@@ -71,11 +71,8 @@ export class ArticleService {
   }
 
   findOne(id: string) {
-    const article = this.articles.find((article) => article.id === id);
-    if (!article) {
-      throw new NotFoundException('Article with the given id not found');
-    }
-    return article;
+    const index = this.findIndexById(id);
+    return this.articles[index];
   }
 
   update(id: string, updateArticleDto: UpdateArticleDto) {

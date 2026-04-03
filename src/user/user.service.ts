@@ -89,6 +89,6 @@ export class UserService {
     }
     const index = this.findIndexById(id);
     this.users.splice(index, 1);
-    this.articleService.clearAuthor(id);
+    this.articleService.clearField('authorId', id);
   }
 }
