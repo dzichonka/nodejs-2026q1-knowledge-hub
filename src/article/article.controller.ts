@@ -8,14 +8,23 @@ import {
   ParseUUIDPipe,
   HttpCode,
   Put,
+  Inject,
+  forwardRef,
+  Query,
 } from '@nestjs/common';
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
+import { CommentService } from 'src/comment/comment.service';
+import { FindArticlesQueryDto } from './dto/find-article-query.dto';
 
 @Controller('article')
 export class ArticleController {
-  constructor(private readonly articleService: ArticleService) {}
+  constructor(
+    private readonly articleService: ArticleService,
+    @Inject(forwardRef(() => CommentService))
+    private readonly commentService: CommentService,
+  ) {}
 
   @Post()
   create(@Body() createArticleDto: CreateArticleDto) {
@@ -23,8 +32,8 @@ export class ArticleController {
   }
 
   @Get()
-  findAll() {
-    return this.articleService.findAll();
+  findAll(@Query() query: FindArticlesQueryDto) {
+    return this.articleService.findAll(query);
   }
 
   @Get(':id')
@@ -43,6 +52,7 @@ export class ArticleController {
   @Delete(':id')
   @HttpCode(204)
   remove(@Param('id', new ParseUUIDPipe()) id: string) {
+    this.commentService.removeByArticleId(id);
     return this.articleService.remove(id);
   }
 }

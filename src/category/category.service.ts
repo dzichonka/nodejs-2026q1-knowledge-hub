@@ -3,7 +3,6 @@ import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import { Category } from './entities/category.entity';
 import { randomUUID } from 'crypto';
-import { ArticleService } from 'src/article/article.service';
 
 @Injectable()
 export class CategoryService {
@@ -19,8 +18,6 @@ export class CategoryService {
       description: 'Computers, gadgets, and all things tech',
     },
   ];
-
-  constructor(private readonly articleService: ArticleService) {}
 
   private findIndexById(id: string) {
     const index = this.categories.findIndex((category) => category.id === id);
@@ -47,7 +44,6 @@ export class CategoryService {
     const index = this.findIndexById(id);
     return this.categories[index];
   }
-
   update(id: string, updateCategoryDto: UpdateCategoryDto) {
     const index = this.findIndexById(id);
     this.categories[index] = {
@@ -60,6 +56,5 @@ export class CategoryService {
   remove(id: string) {
     const index = this.findIndexById(id);
     this.categories.splice(index, 1);
-    this.articleService.clearField('categoryId', id);
   }
 }

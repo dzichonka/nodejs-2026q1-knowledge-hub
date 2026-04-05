@@ -1,9 +1,14 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  UnprocessableEntityException,
+} from '@nestjs/common';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { Article } from './entities/article.entity';
 import { randomUUID } from 'crypto';
 import { ArticleStatus } from 'src/common/types/types';
+import { FindArticlesQueryDto } from './dto/find-article-query.dto';
 
 @Injectable()
 export class ArticleService {
@@ -65,9 +70,46 @@ export class ArticleService {
     this.articles.push(newArticle);
     return newArticle;
   }
+  findForComments(articleId: string) {
+    const article = this.articles.find((article) => article.id === articleId);
+    if (!article) {
+      throw new UnprocessableEntityException('Article does not exist');
+    }
+    return article;
+  }
 
-  findAll() {
-    return this.articles;
+  findAll(query: FindArticlesQueryDto) {
+    let filtered = this.articles;
+
+    if (query.status)
+      filtered = filtered.filter((a) => a.status === query.status);
+    if (query.categoryId)
+      filtered = filtered.filter((a) => a.categoryId === query.categoryId);
+    if (query.tag)
+      filtered = filtered.filter((a) => a.tags?.includes(query.tag));
+
+    if (query.sortBy) {
+      const order = query.order === 'desc' ? -1 : 1;
+      filtered = filtered.sort((a, b) => {
+        if (a[query.sortBy] < b[query.sortBy]) return -1 * order;
+        if (a[query.sortBy] > b[query.sortBy]) return 1 * order;
+        return 0;
+      });
+    }
+
+    if (query.page || query.limit) {
+      const page = query.page || 1;
+      const limit = query.limit || 10;
+      const start = (page - 1) * limit;
+      const end = start + limit;
+      return {
+        total: filtered.length,
+        page,
+        limit,
+        data: filtered.slice(start, end),
+      };
+    }
+    return filtered;
   }
 
   findOne(id: string) {

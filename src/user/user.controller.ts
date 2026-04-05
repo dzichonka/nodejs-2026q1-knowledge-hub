@@ -12,10 +12,16 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
+import { ArticleService } from 'src/article/article.service';
+import { CommentService } from 'src/comment/comment.service';
 
 @Controller('user')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly articleService: ArticleService,
+    private readonly commentService: CommentService,
+  ) {}
 
   @Post()
   create(@Body() createUserDto: CreateUserDto) {
@@ -44,6 +50,8 @@ export class UserController {
   @Delete(':id')
   @HttpCode(204)
   remove(@Param('id') id: string) {
+    this.articleService.clearField('authorId', id);
+    this.commentService.removeByUserId(id);
     return this.userService.remove(id);
   }
 }
