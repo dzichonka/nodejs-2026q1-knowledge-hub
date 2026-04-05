@@ -1,4 +1,4 @@
-import { ArticleStatus } from 'src/common/types/types';
+import { ArticleStatus } from '../../common/types/types';
 
 export class Article {
   id: string; // uuid v4

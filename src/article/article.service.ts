@@ -7,7 +7,7 @@ import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
 import { Article } from './entities/article.entity';
 import { randomUUID } from 'crypto';
-import { ArticleStatus } from 'src/common/types/types';
+import { ArticleStatus } from '../common/types/types';
 import { FindArticlesQueryDto } from './dto/find-article-query.dto';
 
 @Injectable()

@@ -1,7 +1,7 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { CommentService } from './comment.service';
 import { CommentController } from './comment.controller';
-import { ArticleModule } from 'src/article/article.module';
+import { ArticleModule } from '../article/article.module';
 
 @Module({
   controllers: [CommentController],

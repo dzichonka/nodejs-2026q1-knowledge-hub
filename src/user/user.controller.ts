@@ -12,8 +12,8 @@ import {
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ArticleService } from 'src/article/article.service';
-import { CommentService } from 'src/comment/comment.service';
+import { ArticleService } from '../article/article.service';
+import { CommentService } from '../comment/comment.service';
 
 @Controller('user')
 export class UserController {

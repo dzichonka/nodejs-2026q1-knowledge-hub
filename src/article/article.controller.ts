@@ -15,7 +15,7 @@ import {
 import { ArticleService } from './article.service';
 import { CreateArticleDto } from './dto/create-article.dto';
 import { UpdateArticleDto } from './dto/update-article.dto';
-import { CommentService } from 'src/comment/comment.service';
+import { CommentService } from '../comment/comment.service';
 import { FindArticlesQueryDto } from './dto/find-article-query.dto';
 
 @Controller('article')

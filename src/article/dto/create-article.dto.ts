@@ -6,7 +6,7 @@ import {
   IsString,
   IsUUID,
 } from 'class-validator';
-import { ArticleStatus } from 'src/common/types/types';
+import { ArticleStatus } from '../../common/types/types';
 
 export class CreateArticleDto {
   @IsNotEmpty({ message: 'Title is required' })

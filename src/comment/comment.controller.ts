@@ -14,7 +14,7 @@ import {
 import { CommentService } from './comment.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { GetCommentQueryDto } from './dto/get-comment-query.dto';
-import { ArticleService } from 'src/article/article.service';
+import { ArticleService } from '../article/article.service';
 
 @Controller('comment')
 export class CommentController {

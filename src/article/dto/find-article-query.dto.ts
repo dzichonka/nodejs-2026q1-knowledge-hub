@@ -1,5 +1,5 @@
 import { IsOptional, IsEnum, IsUUID, IsString } from 'class-validator';
-import { ArticleStatus } from 'src/common/types/types';
+import { ArticleStatus } from '../../common/types/types';
 
 export class FindArticlesQueryDto {
   @IsOptional()

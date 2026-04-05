@@ -1,5 +1,14 @@
 # Knowledge Hub
 
+This is a REST API for a **Knowledge Hub** platform built with **NestJS**.
+It allows users to create, edit, and organize articles by categories and tags, and manage comments.
+
+## Author
+
+[Anna Vasilevich](https://www.linkedin.com/in/anna-vasilevich-frontend/)
+
+---
+
 ## Prerequisites
 
 - Git - [Download & Install Git](https://git-scm.com/downloads).
@@ -8,12 +17,13 @@
 ## Downloading
 
 ```
-git clone {repository URL}
+git clone https://github.com/dzichonka/nodejs-2026q1-knowledge-hub.git
 ```
 
 ## Installing NPM modules
 
 ```
+git switch develop
 npm install
 ```
 
@@ -29,11 +39,44 @@ For more information about OpenAPI/Swagger please visit https://swagger.io/.
 
 ## API Endpoints
 
+The API has 4 main entities:
+
+1. Users (/user)
+
+- Create, read, update, delete users
+- Passwords are excluded from responses
+- Role-based access: admin, editor, viewer
+
+2. Articles (/article)
+
+- Create, read, update, delete articles
+- Can be filtered by status, categoryId, or tag
+- Deleting a user sets the article's authorId to null
+- Deleting a category sets categoryId in related articles to null
+
+3. Categories (/category)
+
+- Create, read, update, delete categories
+- Automatically updates articles when deleted
+
+4. Comments (/comment)
+
+- Create and delete comments
+- Linked to articles; deleted when the parent article is deleted
+
+For detailed request/response examples, use the Postman collection:
+
 [Postman collection](https://dzichonka-3696400.postman.co/workspace/Anna-Vasilevich's-Workspace~4752c36c-245c-492f-8d06-79b9e08f3075/collection/48079025-8a74a39c-186b-432d-a8f4-1c20a90b5aef?action=share&creator=48079025)
 
 ## Testing
 
 After application running open new terminal and enter:
+
+To run additional unit tests
+
+```
+npm run test:additional
+```
 
 To run all tests without authorization
 
