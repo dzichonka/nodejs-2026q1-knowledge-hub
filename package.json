@@ -18,6 +18,8 @@
     "start:prod": "node dist/main",
     "docker:dev": "docker-compose up",
     "docker:build": "docker-compose up --build",
+    "docker:ps": "docker ps",
+    "docker:down": "docker-compose down",
     "lint": "eslint \"{src,apps,libs}/**/*.ts\" --fix",
     "test:additional": "jest --rootDir . --testMatch \"<rootDir>/src/**/*.spec.ts\"",
     "test": "jest --testMatch \"<rootDir>/*.spec.ts\" --noStackTrace --runInBand",
