@@ -51,19 +51,19 @@ CREATE TABLE "comments" (
 );
 
 -- CreateTable
-CREATE TABLE "Tag" (
+CREATE TABLE "tags" (
     "id" TEXT NOT NULL,
     "name" TEXT NOT NULL,
 
-    CONSTRAINT "Tag_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "tags_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
-CREATE TABLE "_ArticleToTag" (
+CREATE TABLE "_tags_articles" (
     "A" TEXT NOT NULL,
     "B" TEXT NOT NULL,
 
-    CONSTRAINT "_ArticleToTag_AB_pkey" PRIMARY KEY ("A","B")
+    CONSTRAINT "_tags_articles_AB_pkey" PRIMARY KEY ("A","B")
 );
 
 -- CreateIndex
@@ -76,10 +76,13 @@ CREATE INDEX "articles_status_idx" ON "articles"("status");
 CREATE INDEX "articles_categoryId_idx" ON "articles"("categoryId");
 
 -- CreateIndex
-CREATE UNIQUE INDEX "Tag_name_key" ON "Tag"("name");
+CREATE UNIQUE INDEX "categories_name_key" ON "categories"("name");
 
 -- CreateIndex
-CREATE INDEX "_ArticleToTag_B_index" ON "_ArticleToTag"("B");
+CREATE UNIQUE INDEX "tags_name_key" ON "tags"("name");
+
+-- CreateIndex
+CREATE INDEX "_tags_articles_B_index" ON "_tags_articles"("B");
 
 -- AddForeignKey
 ALTER TABLE "articles" ADD CONSTRAINT "articles_authorId_fkey" FOREIGN KEY ("authorId") REFERENCES "users"("id") ON DELETE SET NULL ON UPDATE CASCADE;
@@ -94,7 +97,7 @@ ALTER TABLE "comments" ADD CONSTRAINT "comments_authorId_fkey" FOREIGN KEY ("aut
 ALTER TABLE "comments" ADD CONSTRAINT "comments_articleId_fkey" FOREIGN KEY ("articleId") REFERENCES "articles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_ArticleToTag" ADD CONSTRAINT "_ArticleToTag_A_fkey" FOREIGN KEY ("A") REFERENCES "articles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_tags_articles" ADD CONSTRAINT "_tags_articles_A_fkey" FOREIGN KEY ("A") REFERENCES "articles"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "_ArticleToTag" ADD CONSTRAINT "_ArticleToTag_B_fkey" FOREIGN KEY ("B") REFERENCES "Tag"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "_tags_articles" ADD CONSTRAINT "_tags_articles_B_fkey" FOREIGN KEY ("B") REFERENCES "tags"("id") ON DELETE CASCADE ON UPDATE CASCADE;
