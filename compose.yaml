@@ -1,0 +1,75 @@
+services:
+  app:
+    build:
+      context: .
+    container_name: knowledge-hub-api
+
+    environment:
+      NODE_ENV: production
+      PORT: ${PORT}
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+
+    ports:
+      - '${PORT}:${PORT}'
+
+    depends_on:
+      db:
+        condition: service_healthy
+
+    restart: on-failure
+
+    healthcheck:
+      test: ['CMD', 'wget', '--spider', 'http://localhost:${PORT}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - app-network
+  db:
+    image: postgres:16-alpine
+    container_name: knowledge-hub-db
+
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+
+    ports:
+      - '5432:5432'
+
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}']
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+    networks:
+      - app-network
+
+  adminer:
+    image: adminer
+    container_name: knowledge-hub-adminer
+
+    ports:
+      - '8080:8080'
+
+    profiles:
+      - debug
+
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  db-data:
