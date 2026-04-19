@@ -30,14 +30,14 @@ model Article {
   createdAt  DateTime       @default(now())
   updatedAt  DateTime       @updatedAt
 
-  authorId   String?
   author     User?          @relation(fields: [authorId], references: [id], onDelete: SetNull)
+  authorId   String?
 
-  categoryId String?
   category   Category?      @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId String?
 
   comments   Comment[]
-  tags       Tag[]
+  tags       Tag[] @relation("tags_articles")
 
   @@index([status])
   @@index([categoryId])
@@ -46,7 +46,7 @@ model Article {
 
 model Category {
   id          String    @id @default(uuid())
-  name        String
+  name        String    @unique
   description String
 
   articles    Article[]
@@ -59,11 +59,11 @@ model Comment {
   content   String
   createdAt DateTime @default(now())
 
-  authorId  String?
   author    User?    @relation(fields: [authorId], references: [id], onDelete: Cascade)
+  authorId  String?
 
-  articleId String
   article   Article  @relation(fields: [articleId], references: [id], onDelete: Cascade)
+  articleId String
 
   @@map("comments")
 }
@@ -72,7 +72,9 @@ model Tag {
   id       String    @id @default(uuid())
   name     String    @unique
 
-  articles Article[]
+  articles Article[] @relation("tags_articles")
+
+  @@map("tags")
 }
 
 
