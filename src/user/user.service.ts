@@ -10,8 +10,10 @@ import { UserRole } from '../common/types/types';
 import { randomUUID } from 'crypto';
 import { User } from './entities/user.entity';
 import { isUUID } from 'class-validator';
+import { PrismaService } from 'src/prisma/prisma.service';
 @Injectable()
 export class UserService {
+  constructor(private prisma: PrismaService) {}
   private readonly users: User[] = [
     {
       id: 'aec40a79-983c-487a-be9b-6ffff661a8c0',
@@ -32,7 +34,7 @@ export class UserService {
   ];
 
   private findIndexById(id: string) {
-    const index = this.users.findIndex((user) => user.id === id);
+    const index = this.prisma.user.findIndex((user) => user.id === id);
     if (index === -1) {
       throw new NotFoundException('User with the given id not found');
     }

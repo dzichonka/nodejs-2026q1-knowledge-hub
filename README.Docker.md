@@ -1,3 +1,5 @@
+### [Docker Hub](https://hub.docker.com/r/dzichonka/knowledge-hub)
+
 ### Building and running your application
 
 When you're ready, start your application by running:
@@ -19,4 +21,5 @@ Consult Docker's [getting started](https://docs.docker.com/go/get-started-sharin
 docs for more detail on building and pushing.
 
 ### References
-* [Docker's Node.js guide](https://docs.docker.com/language/nodejs/)
+
+- [Docker's Node.js guide](https://docs.docker.com/language/nodejs/)
